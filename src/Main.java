@@ -68,31 +68,35 @@ public class Main {
 // 4. decipherThis
 public static String decipherThis(String str) {
     String[] words = str.split(" ");
-    StringBuilder output = new StringBuilder();
+    StringBuilder output = new StringBuilder(); // make a stringbuilder to store and later on append string
 
-    for (String word : words) {
-        String firstLetterCode = "";
-        StringBuilder deciphered = new StringBuilder();
+    for (int i = 0; i < words.length; i++) {
+        String initialWord = words[i];
 
-        for (int i = 0; i < word.length() && Character.isDigit(word.charAt(i)); i++) { // Extract the numerical code for the first letter
-            firstLetterCode += word.charAt(i);
+        int chartoInt = Integer.parseInt(initialWord.replaceAll("\\D+", "")); // get the numeric part
+        char chartoChar = (char) chartoInt;
+
+
+        initialWord = initialWord.replaceFirst("\\d+", String.valueOf(chartoChar)); // replace numeric part with its corresponding character
+
+        if (initialWord.length() > 1) { // swap second and last characters
+            char secondChar = initialWord.charAt(1);
+            char lastChar = initialWord.charAt(initialWord.length() - 1);
+            char[] chars = initialWord.toCharArray();
+            chars[1] = lastChar;
+            chars[initialWord.length() - 1] = secondChar;
+            initialWord = String.valueOf(chars);
         }
 
-        char firstLetter = (char) Integer.parseInt(firstLetterCode); // convert the numerical code to a character
-        deciphered.append(firstLetter);
-        String restOfWord = word.substring(firstLetterCode.length());
+        output.append(initialWord);
 
-        if (restOfWord.length() > 1) { // append and rearrange
-            deciphered.append(restOfWord.charAt(restOfWord.length() - 1));
-            deciphered.append(restOfWord, 1, restOfWord.length() - 1);
-            deciphered.append(restOfWord.charAt(0));
-        } else {
-            deciphered.append(restOfWord);
+        if (i < words.length - 1) {
+            output.append(" ");
         }
-
-        output.append(deciphered).append(" ");
     }
 
-    return output.toString().trim();
+    return output.toString();
 }
 }
+
+
